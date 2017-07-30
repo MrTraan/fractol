@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mendeleiev.c                                       :+:      :+:    :+:   */
+/*   julia.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/29 16:36:40 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/07/30 14:31:00 by ngrasset         ###   ########.fr       */
+/*   Created: 2017/07/30 14:10:41 by ngrasset          #+#    #+#             */
+/*   Updated: 2017/07/30 16:17:20 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,35 @@ static void		draw_pixel(t_app *app, int x, int y, int iter)
 	int		color;
 
 	if (iter == (int)app->ctx.max_iter)
-		color = 0;
+		color = 0xFF;
 	else
 		color = iter * 255 / app->ctx.max_iter;
 	*(app->image.data + (x + (WIN_WIDTH * y))) = (int)mlx_get_color_value(app->mlx, color);
+	/* int		color; */
+
+	/* if (iter == (int)app->ctx.max_iter) */
+	/* 	color = 0x0000FF; */
+	/* else */
+	/* 	color = 0; */ 
+	/* *(app->image.data + (x + (WIN_WIDTH * y))) = (int)mlx_get_color_value(app->mlx, color); */
 }
 
-void		mendeleiev_iter(double *cur_im, double *cur_re,
-					double c_re, double c_im)
+void			julia(t_app *app, int x, int y)
 {
-	double tmp_im;
+	double		c_re = 0.285;
+	double		c_im = 0.01;
+	double		z_re = (x / app->ctx.zoom) + app->ctx.min_re;
+	double 		z_im = (y / app->ctx.zoom) + app->ctx.min_im;
+	int			n = 0;
 
-	tmp_im = *cur_im;
-
-	*cur_im = 2 * *cur_re * *cur_im + c_im;
-	*cur_re = (*cur_re * *cur_re) - (tmp_im * tmp_im) + c_re;
-}
-
-void			mendeleiev(t_app *app, int x, int y)
-{
-	double			c_re;
-	double			c_im;
-	int				n;
-
-	c_im = app->ctx.max_im - y * app->ctx.im_factor;
-	c_re = app->ctx.min_re + x * app->ctx.re_factor;
-
-	double Z_re = c_re, Z_im = c_im;
-	n = 0;
 	while (n < app->ctx.max_iter)
 	{
-		double Z_re2 = Z_re*Z_re, Z_im2 = Z_im*Z_im;
-		if(Z_re2 + Z_im2 > 4)
-			break ;
-		Z_im = 2*Z_re*Z_im + c_im;
-		Z_re = Z_re2 - Z_im2 + c_re;
+		double		tmp = z_re;
+		z_re = (z_re * z_re) - (z_im * z_im) + c_re;
+		z_im = 2 * z_im * tmp + c_im;
 		n++;
+		if ((z_re * z_re) + (z_im * z_im) >= 4)
+			break ;
 	}
 	draw_pixel(app, x, y, n);
 }

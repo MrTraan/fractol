@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:10:55 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/07/29 18:32:01 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/07/30 17:20:10 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@
 # define KEY_DOWN 125 
 # define KEY_RIGHT 124 
 # define KEY_LEFT 123 
+# define KEY_MINUS 27
+# define KEY_PLUS 24
+# define KEY_RESET 15
+# define KEY_1 18
+# define KEY_2 19
+# define KEY_ZOOM_OUT 33
+# define KEY_ZOOM_IN 30
 
 typedef struct		s_image
 {
@@ -43,7 +50,6 @@ typedef struct		s_ctx
 	double			im_factor;
 	double			zoom;
 	int				max_iter;
-	int				(*drawing_func)(struct s_ctx, int, int);
 }					t_ctx;
 
 typedef struct		s_app
@@ -52,14 +58,18 @@ typedef struct		s_app
 	void			*win;
 	t_image			image;
 	t_ctx			ctx;
+	void			(*drawing_func)(struct s_app *, int, int);
 }					t_app;
 
-typedef int			(*t_drawing_func)(t_ctx, int, int);
+typedef void		(*t_drawing_func)(t_app *, int, int);
 
 int					main_draw_loop(t_app *app);
+void				init_drawing_ctx(t_app *app);
 
-int					mendeleiev(t_ctx ctx, int x, int y);
+void				mendeleiev(t_app *app, int x, int y);
+void				julia(t_app *app, int x, int y);
 
 int					keyhook(int keycode, t_app *app);
+int					mouse_hook(int button, int x, int y, t_app *app);
 
 #endif
