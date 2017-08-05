@@ -18,6 +18,7 @@ all: $(NAME)
 
 $(NAME): $(O_FILES)
 	make -C libft
+	make -C minilibx_macos
 	$(CC) $(FLAGS) $^ $(INCLUDES) $(LIB) -o $@
 
 $(O_DIR)%.o: $(C_DIR)%.c
@@ -26,6 +27,7 @@ $(O_DIR)%.o: $(C_DIR)%.c
 
 clean:
 	make clean -C libft
+	make clean -C minilibx_macos
 	@rm -Rf $(O_DIR)
 
 fclean: clean

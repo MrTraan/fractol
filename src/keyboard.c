@@ -86,3 +86,11 @@ int			mouse_hook(int button, int x, int y, t_app *app)
 	printf("x: %d\ty: %d\tbutton: %d\n", x, y, button);
 	return (0);
 }
+
+int         motion_notify(int x, int y, t_app *app)
+{
+    app->ctx.cursor_pos_x = x;
+    app->ctx.cursor_pos_y = y;
+    main_draw_loop(app);
+    return (0);
+}

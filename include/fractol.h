@@ -33,6 +33,9 @@
 # define KEY_ZOOM_OUT 33
 # define KEY_ZOOM_IN 30
 
+# define PTR_MOTION_MASK (1L<<6)
+# define MOTION_NOTIFY 6
+
 typedef struct		s_image
 {
 	void			*ptr;
@@ -42,6 +45,8 @@ typedef struct		s_image
 
 typedef struct		s_ctx
 {
+    int             cursor_pos_x;
+    int             cursor_pos_y;
 	double			min_re;
 	double			max_re;
 	double			min_im;
@@ -71,5 +76,6 @@ void				julia(t_app *app, int x, int y);
 
 int					keyhook(int keycode, t_app *app);
 int					mouse_hook(int button, int x, int y, t_app *app);
+int                 motion_notify(int x, int y, t_app *app);
 
 #endif

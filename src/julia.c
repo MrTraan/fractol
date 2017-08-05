@@ -29,11 +29,11 @@ static void		draw_pixel(t_app *app, int x, int y, int iter)
 	/* 	color = 0; */ 
 	/* *(app->image.data + (x + (WIN_WIDTH * y))) = (int)mlx_get_color_value(app->mlx, color); */
 }
-
+#include <stdio.h>
 void			julia(t_app *app, int x, int y)
 {
-	double		c_re = 0.285;
-	double		c_im = 0.01;
+	double		c_re = (double)app->ctx.cursor_pos_x / WIN_WIDTH * (2.0f / 3.0f);
+	double		c_im = (double)app->ctx.cursor_pos_y / WIN_HEIGHT * (2.0f / 3.0f);
 	double		z_re = (x / app->ctx.zoom) + app->ctx.min_re;
 	double 		z_im = (y / app->ctx.zoom) + app->ctx.min_im;
 	int			n = 0;

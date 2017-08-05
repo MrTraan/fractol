@@ -14,6 +14,8 @@
 
 t_ctx		g_default_ctx[2] = {
 	{
+        0,
+        0,
 		-2.0,
 		1.0,
 		-1.2,
@@ -24,6 +26,8 @@ t_ctx		g_default_ctx[2] = {
 		30
 	},
 	{
+        0,
+        0,
 		-1.5,
 		0.5,
 		-1.2,
@@ -105,6 +109,7 @@ int		main(void)
 	mlx_key_hook(app.win, keyhook, &app);
 	mlx_mouse_hook(app.win, mouse_hook, &app);
 	mlx_expose_hook(app.win, main_draw_loop, &app);
+    mlx_hook(app.win, MOTION_NOTIFY, PTR_MOTION_MASK, motion_notify, &app);
 	mlx_loop(app.mlx);
 	return (0);
 }
