@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/30 14:10:41 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/07/30 16:17:20 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/08/16 14:28:58 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static void		draw_pixel(t_app *app, int x, int y, int iter)
 #include <stdio.h>
 void			julia(t_app *app, int x, int y)
 {
-	double		c_re = (double)app->ctx.cursor_pos_x / WIN_WIDTH * (2.0f / 3.0f);
-	double		c_im = (double)app->ctx.cursor_pos_y / WIN_HEIGHT * (2.0f / 3.0f);
+	double		c_re = (double)app->mouse_infos[1] / WIN_WIDTH * (2.0f / 3.0f);
+	double		c_im = (double)app->mouse_infos[2] / WIN_HEIGHT * (2.0f / 3.0f);
 	double		z_re = (x / app->ctx.zoom) + app->ctx.min_re;
 	double 		z_im = (y / app->ctx.zoom) + app->ctx.min_im;
 	int			n = 0;

@@ -8,9 +8,12 @@ O_DIR =	.tmp/obj
 O_DIRS = $(C_DIRS:$(C_DIR)%=$(O_DIR)%)
 O_FILES = $(C_FILES:$(C_DIR)%.c=$(O_DIR)%.o)
 
+OSX_VERSION = $(shell sw_vers -productVersion | cut -d '.' -f2)
+MINILIBX_FOLDER = ./minilibx_osx_$(OSX_VERSION)
+
 FLAGS = -Wall -Wextra -Werror
-INCLUDES = -I ./include -I ./libft/includes -I./minilibx_macos
-LIB = -L./minilibx_macos -lmlx -framework OpenGL -framework AppKit -L./libft -lft
+INCLUDES = -I ./include -I ./libft/includes -I./$(MINILIBX_FOLDER)
+LIB = -L./$(MINILIBX_FOLDER) -lmlx -framework OpenGL -framework AppKit -L./libft -lft
 
 CC = gcc
 
@@ -18,7 +21,7 @@ all: $(NAME)
 
 $(NAME): $(O_FILES)
 	make -C libft
-	make -C minilibx_macos
+	make -C $(MINILIBX_FOLDER)
 	$(CC) $(FLAGS) $^ $(INCLUDES) $(LIB) -o $@
 
 $(O_DIR)%.o: $(C_DIR)%.c
@@ -27,7 +30,7 @@ $(O_DIR)%.o: $(C_DIR)%.c
 
 clean:
 	make clean -C libft
-	make clean -C minilibx_macos
+	make clean -C $(MINILIBX_FOLDER)
 	@rm -Rf $(O_DIR)
 
 fclean: clean

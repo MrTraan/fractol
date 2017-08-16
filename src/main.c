@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:05:43 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/07/30 17:20:42 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/08/16 14:29:38 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 t_ctx		g_default_ctx[2] = {
 	{
-        0,
-        0,
 		-2.0,
 		1.0,
 		-1.2,
@@ -26,8 +24,6 @@ t_ctx		g_default_ctx[2] = {
 		30
 	},
 	{
-        0,
-        0,
 		-1.5,
 		0.5,
 		-1.2,
@@ -35,7 +31,7 @@ t_ctx		g_default_ctx[2] = {
 		0,
 		0,
 		256,
-		150
+		75
 	}
 };
 
@@ -97,6 +93,7 @@ int		main(void)
 {
 	t_app		app;
 
+	ft_memset(&app, 0, sizeof(t_app));
 	app.drawing_func = &mendeleiev;
 
 	app.mlx = mlx_init();

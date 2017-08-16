@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:10:55 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/07/30 17:20:10 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/08/16 16:00:05 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,10 @@ typedef struct		s_image
 
 typedef struct		s_ctx
 {
-    int             cursor_pos_x;
-    int             cursor_pos_y;
 	double			min_re;
 	double			max_re;
 	double			min_im;
 	double			max_im;
-	double			re_factor;
-	double			im_factor;
 	double			zoom;
 	int				max_iter;
 }					t_ctx;
@@ -64,6 +60,7 @@ typedef struct		s_app
 	t_image			image;
 	t_ctx			ctx;
 	void			(*drawing_func)(struct s_app *, int, int);
+	int 			mouse_infos[3];
 }					t_app;
 
 typedef void		(*t_drawing_func)(t_app *, int, int);

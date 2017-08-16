@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 16:36:40 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/07/30 14:31:00 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/08/16 16:03:04 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void			mendeleiev(t_app *app, int x, int y)
 	double			c_re;
 	double			c_im;
 	int				n;
-
-	c_im = app->ctx.max_im - y * app->ctx.im_factor;
+	
 	c_re = app->ctx.min_re + x * app->ctx.re_factor;
+	c_im = app->ctx.max_im - y * app->ctx.im_factor;
 
 	double Z_re = c_re, Z_im = c_im;
 	n = 0;
