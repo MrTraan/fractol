@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 16:36:40 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/08/16 16:03:04 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/04 16:42:26 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ static void		draw_pixel(t_app *app, int x, int y, int iter)
 
 	if (iter == (int)app->ctx.max_iter)
 		color = 0;
+	else if (app->ctx.palette == BLUE)
+		color = iter * 0xFF / app->ctx.max_iter;
+	else if (app->ctx.palette == PSYCHO)
+		color = iter * 0xFFFFFF / app->ctx.max_iter;
 	else
-		color = iter * 255 / app->ctx.max_iter;
+		color = 0;
 	*(app->image.data + (x + (WIN_WIDTH * y))) = (int)mlx_get_color_value(app->mlx, color);
 }
 
@@ -40,8 +44,10 @@ void			mendeleiev(t_app *app, int x, int y)
 	double			c_im;
 	int				n;
 	
-	c_re = app->ctx.min_re + x * app->ctx.re_factor;
-	c_im = app->ctx.max_im - y * app->ctx.im_factor;
+	double re_factor = (app->ctx.max_re - app->ctx.min_re) * app->ctx.zoom / (WIN_WIDTH - 1);
+	double im_factor = (app->ctx.max_im - app->ctx.min_im) * app->ctx.zoom / (WIN_HEIGHT - 1);
+	c_re = app->ctx.min_re + x * re_factor;
+	c_im = app->ctx.min_im + y * im_factor;
 
 	double Z_re = c_re, Z_im = c_im;
 	n = 0;

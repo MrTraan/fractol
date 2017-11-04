@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:05:43 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/08/16 14:29:38 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/04 15:50:33 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,18 @@ t_ctx		g_default_ctx[2] = {
 		1.0,
 		-1.2,
 		1.2,
-		0,
-		0,
 		1,
-		30
+		30,
+		BLUE
 	},
 	{
 		-1.5,
 		0.5,
 		-1.2,
 		1.2,
-		0,
-		0,
 		256,
-		75
+		75,
+		BLUE
 	}
 };
 
@@ -85,8 +83,6 @@ void	init_drawing_ctx(t_app *app)
 		ft_memcpy(&(app->ctx), &(g_default_ctx[1]), sizeof(t_ctx));
 	else
 		ft_memset(&(app->ctx), 0, sizeof(t_ctx));
-	app->ctx.re_factor = (app->ctx.max_re - app->ctx.min_re) * app->ctx.zoom / (WIN_WIDTH - 1);
-	app->ctx.im_factor = (app->ctx.max_im - app->ctx.min_im) * app->ctx.zoom / (WIN_HEIGHT - 1);
 }
 
 int		main(void)
@@ -98,15 +94,15 @@ int		main(void)
 
 	app.mlx = mlx_init();
 	app.win = mlx_new_window(app.mlx, WIN_WIDTH, WIN_HEIGHT, "fractol");
-	app.image.ptr = mlx_new_image(app.win, WIN_WIDTH, WIN_HEIGHT);
+	mlx_expose_hook(app.win, main_draw_loop, &app);
+	app.image.ptr = mlx_new_image(app.mlx, WIN_WIDTH, WIN_HEIGHT);
 	app.image.data = (int *)mlx_get_data_addr(app.image.ptr, app.image.infos,
 			app.image.infos + 1, app.image.infos + 2);
 	init_drawing_ctx(&app);
-	main_draw_loop(&app);
 	mlx_key_hook(app.win, keyhook, &app);
 	mlx_mouse_hook(app.win, mouse_hook, &app);
-	mlx_expose_hook(app.win, main_draw_loop, &app);
-    mlx_hook(app.win, MOTION_NOTIFY, PTR_MOTION_MASK, motion_notify, &app);
+	mlx_hook(app.win, MOTION_NOTIFY, PTR_MOTION_MASK, motion_notify, &app);
+	main_draw_loop(&app);
 	mlx_loop(app.mlx);
 	return (0);
 }

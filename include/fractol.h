@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:10:55 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/08/16 16:00:05 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/04 15:50:03 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,19 @@
 # define KEY_2 19
 # define KEY_ZOOM_OUT 33
 # define KEY_ZOOM_IN 30
+# define KEY_Q 12
+# define KEY_W 13
+# define KEY_E 14
+# define KEY_R 15
 
 # define PTR_MOTION_MASK (1L<<6)
 # define MOTION_NOTIFY 6
+
+typedef enum		e_palette
+{
+	BLUE,
+	PSYCHO
+}					t_palette;
 
 typedef struct		s_image
 {
@@ -51,6 +61,7 @@ typedef struct		s_ctx
 	double			max_im;
 	double			zoom;
 	int				max_iter;
+	t_palette		palette;	
 }					t_ctx;
 
 typedef struct		s_app

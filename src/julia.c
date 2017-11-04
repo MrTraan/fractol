@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/30 14:10:41 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/08/16 14:28:58 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/04 15:52:23 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,15 @@ static void		draw_pixel(t_app *app, int x, int y, int iter)
 
 	if (iter == (int)app->ctx.max_iter)
 		color = 0xFF;
+	else if (app->ctx.palette == BLUE)
+		color = iter * 0xFF / app->ctx.max_iter;
+	else if (app->ctx.palette == PSYCHO)
+		color = iter * 0xFFFFFF / app->ctx.max_iter;
 	else
-		color = iter * 255 / app->ctx.max_iter;
+		color = 0;
 	*(app->image.data + (x + (WIN_WIDTH * y))) = (int)mlx_get_color_value(app->mlx, color);
-	/* int		color; */
-
-	/* if (iter == (int)app->ctx.max_iter) */
-	/* 	color = 0x0000FF; */
-	/* else */
-	/* 	color = 0; */ 
-	/* *(app->image.data + (x + (WIN_WIDTH * y))) = (int)mlx_get_color_value(app->mlx, color); */
 }
-#include <stdio.h>
+
 void			julia(t_app *app, int x, int y)
 {
 	double		c_re = (double)app->mouse_infos[1] / WIN_WIDTH * (2.0f / 3.0f);
