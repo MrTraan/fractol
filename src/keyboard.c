@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 18:22:27 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/04 16:56:15 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/05 17:30:43 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,46 +19,26 @@ static void		handle_zoom(int keycode, t_app *app)
 	if (keycode == KEY_PLUS)
 		app->ctx.max_iter += 5;
 	if (keycode == KEY_ZOOM_OUT && app->ctx.zoom >= 0.0001)
-	{
-		printf("Before: (%f %f) (%f %f)\n",
-				app->ctx.min_re,
-				app->ctx.max_re,
-				app->ctx.min_im,
-				app->ctx.max_im);
-		float x = (app->ctx.max_re + app->ctx.min_re) / 2;
-		float y = (app->ctx.max_im + app->ctx.min_im) / 2;
-		float h = 0.05;
-		app->ctx.min_re = x-h;
-		app->ctx.max_re = x+h;
-		app->ctx.min_im = y-h;
-		app->ctx.max_im = y+h;
-		printf("After: (%f %f) (%f %f)\n",
-				app->ctx.min_re,
-				app->ctx.max_re,
-				app->ctx.min_im,
-				app->ctx.max_im);
-		/* app->ctx.zoom /= 2; */
-	}
+		app->ctx.zoom /= 1.05f;
 	if (keycode == KEY_ZOOM_IN)
+		app->ctx.zoom *= 1.05f;
+	if (keycode == KEY_ZOOM_OUT || keycode == KEY_ZOOM_IN)
 	{
-		printf("Before: (%f %f) (%f %f)\n",
-				app->ctx.min_re,
-				app->ctx.max_re,
-				app->ctx.min_im,
-				app->ctx.max_im);
-		float x = (app->ctx.max_re + app->ctx.min_re)  / 2;
-		float y = (app->ctx.max_im + app->ctx.min_im) / 2;
-		float h = 0.05;
-		app->ctx.min_re = x+h;
-		app->ctx.max_re = x-h;
-		app->ctx.min_im = y+h;
-		app->ctx.max_im = y-h;
-		printf("After: (%f %f) (%f %f)\n",
-				app->ctx.min_re,
-				app->ctx.max_re,
-				app->ctx.min_im,
-				app->ctx.max_im);
-		/* app->ctx.zoom *= 2; */
+		t_iv2 cursor = {
+			app->mouse_infos[1],
+			app->mouse_infos[2]
+		};
+		t_dv2 point_under_cursor = {
+			1.5 * (double)(cursor.x - WIN_WIDTH / 2.0f) / (double)(0.5f * app->ctx.zoom * WIN_WIDTH) + app->ctx.offset_x,
+			(cursor.y - WIN_HEIGHT / 2.0f) / (0.5f * app->ctx.zoom * WIN_HEIGHT) + app->ctx.offset_y
+		};
+		t_dv2 point_in_middle = {
+			1.5 * (double)(WIN_WIDTH / 2.0f - WIN_WIDTH / 2.0f) / (double)(0.5f * app->ctx.zoom * WIN_WIDTH) + app->ctx.offset_x,
+			(WIN_HEIGHT / 2.0f - WIN_HEIGHT / 2.0f) / (0.5f * app->ctx.zoom * WIN_HEIGHT) + app->ctx.offset_y
+		};
+
+		app->ctx.offset_x -= point_in_middle.x - point_under_cursor.x;
+		app->ctx.offset_y -= point_in_middle.y - point_under_cursor.y;
 	}
 }
 
@@ -66,25 +46,13 @@ static void		handle_zoom(int keycode, t_app *app)
 static void		handle_movement(int keycode, t_app *app)
 {
 	if (keycode == KEY_UP)
-	{
-		app->ctx.max_im -= 0.1;
-		app->ctx.min_im -= 0.1;
-	}
+		app->ctx.offset_y += 0.1f / app->ctx.zoom;
 	if (keycode == KEY_DOWN)
-	{
-		app->ctx.max_im += 0.1;
-		app->ctx.min_im += 0.1;
-	}
+		app->ctx.offset_y -= 0.1 / app->ctx.zoom;
 	if (keycode == KEY_LEFT)
-	{
-		app->ctx.max_re -= 0.1;
-		app->ctx.min_re -= 0.1;
-	}
+		app->ctx.offset_x += 0.1 / app->ctx.zoom;
 	if (keycode == KEY_RIGHT)
-	{
-		app->ctx.max_re += 0.1;
-		app->ctx.min_re += 0.1;
-	}
+		app->ctx.offset_x -= 0.1 / app->ctx.zoom;
 }
 
 static void		switch_fractol(int keycode, t_app *app)
@@ -136,5 +104,5 @@ int         motion_notify(int x, int y, t_app *app)
 		app->mouse_infos[2] = y;
 		main_draw_loop(app);
 	}
-    return (0);
+	return (0);
 }

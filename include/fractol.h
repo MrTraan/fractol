@@ -1,7 +1,6 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
+/*                                                        :::      ::::::::   */ /*   fractol.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -61,7 +60,9 @@ typedef struct		s_ctx
 	double			max_im;
 	double			zoom;
 	int				max_iter;
-	t_palette		palette;	
+	double			offset_x;
+	double			offset_y;
+	t_palette		palette;
 }					t_ctx;
 
 typedef struct		s_app
@@ -70,17 +71,29 @@ typedef struct		s_app
 	void			*win;
 	t_image			image;
 	t_ctx			ctx;
-	void			(*drawing_func)(struct s_app *, int, int);
+	void			(*drawing_func)(struct s_app *);
 	int 			mouse_infos[3];
 }					t_app;
 
-typedef void		(*t_drawing_func)(t_app *, int, int);
+typedef struct 		s_iv2
+{
+	int				x;
+	int				y;
+}					t_iv2;
+
+typedef struct 		s_dv2
+{
+	double			x;
+	double			y;
+}					t_dv2;
+
+typedef void		(*t_drawing_func)(t_app *);
 
 int					main_draw_loop(t_app *app);
 void				init_drawing_ctx(t_app *app);
 
-void				mendeleiev(t_app *app, int x, int y);
-void				julia(t_app *app, int x, int y);
+void				mendeleiev(t_app *app);
+void				julia(t_app *app);
 
 int					keyhook(int keycode, t_app *app);
 int					mouse_hook(int button, int x, int y, t_app *app);

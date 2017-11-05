@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:05:43 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/04 15:50:33 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/05 17:29:34 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ t_ctx		g_default_ctx[2] = {
 		1.0,
 		-1.2,
 		1.2,
-		1,
+		1.0,
 		30,
+		0,
+		0,
 		BLUE
 	},
 	{
@@ -27,17 +29,31 @@ t_ctx		g_default_ctx[2] = {
 		0.5,
 		-1.2,
 		1.2,
-		256,
+		1,
 		75,
+		0,
+		0,
 		BLUE
 	}
 };
-
+#include<stdio.h>
 void	put_settings(t_app *app)
 {
 	char	*max_iter;
-	char	*zoom;
 	char	buffer[100];
+		
+	t_iv2 cursor = {
+			app->mouse_infos[1],
+			app->mouse_infos[2]
+		};
+		t_dv2 point_under_cursor = {
+			1.5 * (double)(cursor.x - WIN_WIDTH / 2.0f) / (double)(0.5f * app->ctx.zoom * WIN_WIDTH) + app->ctx.offset_x,
+			(cursor.y - WIN_HEIGHT / 2.0f) / (0.5f * app->ctx.zoom * WIN_HEIGHT) + app->ctx.offset_y
+		};
+		t_dv2 point_in_middle = {
+			1.5 * (double)(WIN_WIDTH / 2.0f - WIN_WIDTH / 2.0f) / (double)(0.5f * app->ctx.zoom * WIN_WIDTH) + app->ctx.offset_x,
+			(WIN_HEIGHT / 2.0f - WIN_HEIGHT / 2.0f) / (0.5f * app->ctx.zoom * WIN_HEIGHT) + app->ctx.offset_y
+		};
 
 	ft_memset(buffer, 0, 100);
 	max_iter = ft_itoa(app->ctx.max_iter);
@@ -46,29 +62,25 @@ void	put_settings(t_app *app)
 	mlx_string_put(app->mlx, app->win, 0, 0, 0xFFFFFF, buffer);
 	free(max_iter);
 	ft_memset(buffer, 0, 100);
-	zoom = ft_itoa(app->ctx.zoom);
-	ft_strlcat(buffer, "zoom: ", 100);
-	ft_strlcat(buffer, zoom, 100);
+	sprintf(buffer, "zoom: %f\n", app->ctx.zoom);
 	mlx_string_put(app->mlx, app->win, 0, 12, 0xFFFFFF, buffer);
-	free(zoom);
+
+	sprintf(buffer, "Mouse: %d %d\n", cursor.x, cursor.y);
+	mlx_string_put(app->mlx, app->win, 0, 24, 0xFFFFFF, buffer);
+
+	sprintf(buffer, "Point under cursor: %f %f\n", point_under_cursor.x, point_under_cursor.y);
+	mlx_string_put(app->mlx, app->win, 0, 36, 0xFFFFFF, buffer);
+	
+	sprintf(buffer, "Point in middle: %f %f\n", point_in_middle.x, point_in_middle.y);
+	mlx_string_put(app->mlx, app->win, 0, 48, 0xFFFFFF, buffer);
+
+	sprintf(buffer, "Offset: %f %f\n", app->ctx.offset_x, app->ctx.offset_y);
+	mlx_string_put(app->mlx, app->win, 0, 60, 0xFFFFFF, buffer);
 }
 
 int		main_draw_loop(t_app *app)
 {
-	int		x;
-	int		y;
-
-	y = 0;
-	while (y < WIN_HEIGHT)
-	{
-		x = 0;
-		while (x < WIN_WIDTH)
-		{
-			app->drawing_func(app, x, y);
-			x++;
-		}
-		y++;
-	}
+	app->drawing_func(app);
 	mlx_put_image_to_window(app->mlx, app->win, app->image.ptr, 0, 0);
 	put_settings(app);
 	ft_putstr("Image displayed\n");
