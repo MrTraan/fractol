@@ -35,45 +35,21 @@
 # define KEY_W 13
 # define KEY_E 14
 # define KEY_R 15
+# define KEY_SPACE 49
 
 # define PTR_MOTION_MASK (1L<<6)
+# define BUTTON1_MOTION_MASK (1L<<8)
+# define BUTTON_PRESS 4
+# define BUTTON_RELEASE 5
 # define MOTION_NOTIFY 6
+
+# define MAX(x, y) x > y ? y : x
 
 typedef enum		e_palette
 {
 	BLUE,
 	PSYCHO
 }					t_palette;
-
-typedef struct		s_image
-{
-	void			*ptr;
-	int				*data;
-	int				infos[3];
-}					t_image;
-
-typedef struct		s_ctx
-{
-	double			min_re;
-	double			max_re;
-	double			min_im;
-	double			max_im;
-	double			zoom;
-	int				max_iter;
-	double			offset_x;
-	double			offset_y;
-	t_palette		palette;
-}					t_ctx;
-
-typedef struct		s_app
-{
-	void			*mlx;
-	void			*win;
-	t_image			image;
-	t_ctx			ctx;
-	void			(*drawing_func)(struct s_app *);
-	int 			mouse_infos[3];
-}					t_app;
 
 typedef struct 		s_iv2
 {
@@ -87,6 +63,37 @@ typedef struct 		s_dv2
 	double			y;
 }					t_dv2;
 
+
+typedef struct		s_image
+{
+	void			*ptr;
+	int				*data;
+	int				infos[3];
+}					t_image;
+
+typedef struct		s_ctx
+{
+	t_dv2			re;
+	t_dv2			im;
+	t_dv2			offset;
+	t_dv2			julia_params;
+	double			zoom;
+	int				max_iter;
+	t_palette		palette;
+}					t_ctx;
+
+typedef struct		s_app
+{
+	void			*mlx;
+	void			*win;
+	t_image			image;
+	t_ctx			ctx;
+	void			(*drawing_func)(struct s_app *);
+	t_iv2			cursor_pos;
+	char			lock_julia;
+	char			mouse_down;
+}					t_app;
+
 typedef void		(*t_drawing_func)(t_app *);
 
 int					main_draw_loop(t_app *app);
@@ -98,5 +105,7 @@ void				julia(t_app *app);
 int					keyhook(int keycode, t_app *app);
 int					mouse_hook(int button, int x, int y, t_app *app);
 int                 motion_notify(int x, int y, t_app *app);
+
+t_dv2				map_point_in_plan(t_app *app, t_iv2 point);
 
 #endif
