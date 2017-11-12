@@ -12,8 +12,8 @@ OSX_VERSION = $(shell sw_vers -productVersion | cut -d '.' -f2)
 MINILIBX_FOLDER = ./minilibx_osx_$(OSX_VERSION)
 
 FLAGS = -Wall -Wextra -Werror
-INCLUDES = -I ./include -I ./libft/includes 
-LIB = -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit -L./libft -lft -lpthread
+INCLUDES = -I ./include -I ./libft/includes -I./minilibx_macos/
+LIB = -L /usr/local/lib -L./minilibx_macos -lmlx -framework OpenGL -framework AppKit -L./libft -lft -lpthread
 # INCLUDES = -I ./include -I ./libft/includes -I./sdlmlx -I./SDL2.framework/Headers/
 # LIB = -framework OpenGL -framework AppKit -L./libft -lft -F./ -framework SDL2 -Wl -rpath ./
 

@@ -13,13 +13,13 @@
 #include <fractol.h>
 #include <math.h>
 
-void	julia(t_app *app, t_iv2 point)
+void	julia(t_app *app, t_iv2 coord)
 {
 	t_dv2		z;
 	int			n;
 	double		tmp;
 
-	z = map_point_in_plan(app, point);
+	z = map_point_in_plan(app, coord);
 	n = 0;
 	while (n < app->ctx.max_iter)
 	{
@@ -30,17 +30,17 @@ void	julia(t_app *app, t_iv2 point)
 		if ((z.x * z.x) + (z.y * z.y) >= 4)
 			break ;
 	}
-	draw_pixel(app, point, n);
+	draw_pixel(app, coord, n);
 }
 
-void	mandelbrot(t_app *app, t_iv2 iter)
+void	mandelbrot(t_app *app, t_iv2 coord)
 {
 	t_dv2			point;
 	t_dv2			new;
 	t_dv2			old;
 	int				n;
 
-	point = map_point_in_plan(app, iter);
+	point = map_point_in_plan(app, coord);
 	new = (t_dv2) { .x = 0.0f, .y = 0.0f };
 	old = (t_dv2) { .x = 0.0f, .y = 0.0f };
 	n = 0;
@@ -54,38 +54,31 @@ void	mandelbrot(t_app *app, t_iv2 iter)
 			break ;
 		n++;
 	}
-	draw_pixel(app, iter, n);
+	draw_pixel(app, coord, n);
 }
 
-void	burning_ship(t_app *app, t_iv2 iter)
+void	burning_ship(t_app *app, t_iv2 coord)
 {
-	t_dv2 midpoint = { .x = app->ctx.offset.x, .y = app->ctx.offset.y };
-	double range = 1 / app->ctx.zoom;
-	int itermax = app->ctx.max_iter;
 
-	t_dv2 p0, c, p;
-	p0.x = 0;
-	p0.y = 0;
-	c.x = midpoint.x + 2 * range * (iter.x / (double)WIN_WIDTH - 0.5);
-	c.y = midpoint.y + 2 * range * (iter.y / (double)WIN_HEIGHT - 0.5);
-	int k;
-	for (k=0;k<itermax;k++) {
-		p.x = p0.x*p0.x - p0.y*p0.y + c.x;
-		p.y = 2 * fabs(p0.x*p0.y) + c.y;
-		p0.x = p.x;
-		p0.y = p.y;
-		if (p.x*p.x + p.y*p.y > 10)
+    int      n;
+    t_dv2 c;
+	t_dv2 old;
+    t_dv2 new;
+
+	old.x = 0;
+	old.y = 0;
+	c.x = app->ctx.offset.x + 2 * 1 / app->ctx.zoom * (coord.x / (double)WIN_WIDTH - 0.5);
+	c.y = app->ctx.offset.y + 2 * 1 / app->ctx.zoom * (coord.y / (double)WIN_HEIGHT - 0.5);
+    n = 0;
+	while (n < app->ctx.max_iter)
+    {
+		new.x = old.x*old.x - old.y*old.y + c.x;
+		new.y = 2 * fabs(old.x*old.y) + c.y;
+		old.x = new.x;
+		old.y = new.y;
+		if (new.x*new.x + new.y*new.y > 10)
 			break;
+        n++;
 	}
-	/* while (n < app->ctx.max_iter) */
-	/* { */
-	/* 	old.x = new.x; */
-	/* 	old.y = new.y; */
-	/* 	new.x = old.x * old.x - old.y * old.y + point.x; */
-	/* 	new.y = 2 * old.x * old.y + point.y; */
-	/* 	if ((new.x * new.x + new.y * new.y) > 4) */
-	/* 		break ; */
-	/* 	n++; */
-	/* } */
-	draw_pixel(app, iter, k);
+	draw_pixel(app, coord, n);
 }
