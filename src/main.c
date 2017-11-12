@@ -6,31 +6,34 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:05:43 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/12 16:55:09 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/12 19:07:27 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fractol.h>
 
-t_ctx		g_default_ctx[2] = {
+t_ctx		g_default_ctx[3] = {
 	{
-		{-2.0, 1.0},
-		{-1.2, 1.2},
-		{0, 0},
+		{-0.75, 0},
 		{0, 0},
 		1.0,
 		30,
 		BLUE
 	},
 	{
-		{-1.5, 0.5},
-		{-1.2, 1.2},
 		{0, 0},
 		{0, 0},
-		1,
+		1.0,
 		40,
 		RED
-	}
+	},
+	{
+		{0, 0},
+		{0, 0},
+		1.0,
+		50,
+		GREEN
+	},
 };
 
 int		main_draw_loop(t_app *app)
@@ -42,10 +45,12 @@ int		main_draw_loop(t_app *app)
 
 void	init_drawing_ctx(t_app *app)
 {
-	if (app->drawing_func == &mendeleiev)
+	if (app->drawing_func == &mandelbrot)
 		ft_memcpy(&(app->ctx), &(g_default_ctx[0]), sizeof(t_ctx));
 	else if (app->drawing_func == &julia)
 		ft_memcpy(&(app->ctx), &(g_default_ctx[1]), sizeof(t_ctx));
+	else if (app->drawing_func == &burning_ship)
+		ft_memcpy(&(app->ctx), &(g_default_ctx[2]), sizeof(t_ctx));
 	else
 		ft_memset(&(app->ctx), 0, sizeof(t_ctx));
 }
@@ -54,6 +59,7 @@ int		loop_hook(t_app *app)
 {
 	if (app->mouse_down)
 	{
+		app->ctx.zoom *= 1.05f;
 		zoom(app);
 		main_draw_loop(app);
 	}
@@ -65,7 +71,7 @@ int		main(void)
 	t_app		app;
 
 	ft_memset(&app, 0, sizeof(t_app));
-	app.drawing_func = &mendeleiev;
+	app.drawing_func = &mandelbrot;
 	app.mlx = mlx_init();
 	app.win = mlx_new_window(app.mlx, WIN_WIDTH, WIN_HEIGHT, "fractol");
 	mlx_expose_hook(app.win, main_draw_loop, &app);

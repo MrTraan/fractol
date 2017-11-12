@@ -29,6 +29,7 @@
 # define KEY_RESET 51
 # define KEY_1 18
 # define KEY_2 19
+# define KEY_3 20
 # define KEY_ZOOM_OUT 33
 # define KEY_ZOOM_IN 30
 # define KEY_Q 12
@@ -44,6 +45,7 @@
 # define MOTION_NOTIFY 6
 
 # define MAX(x, y) x > y ? y : x
+# define ABS(x) x < 0 ? -x : x
 
 typedef enum		e_palette
 {
@@ -75,8 +77,6 @@ typedef struct		s_image
 
 typedef struct		s_ctx
 {
-	t_dv2			re;
-	t_dv2			im;
 	t_dv2			offset;
 	t_dv2			julia_params;
 	double			zoom;
@@ -102,7 +102,8 @@ int					main_draw_loop(t_app *app);
 void				init_drawing_ctx(t_app *app);
 
 void				mt_draw_fractal(t_app *app);
-void				mendeleiev(t_app *app, t_iv2 coord);
+void				mandelbrot(t_app *app, t_iv2 coord);
+void				burning_ship(t_app *app, t_iv2 coord);
 void				julia(t_app *app, t_iv2 coord);
 
 int					keyhook(int keycode, t_app *app);

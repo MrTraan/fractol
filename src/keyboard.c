@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 18:22:27 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/12 16:54:44 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/12 20:13:29 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void			zoom(t_app *app)
 	t_dv2	point_under_cursor;
 	t_dv2	point_in_middle;
 
-	app->ctx.zoom *= 1.05f;
 	screen_middle = (t_iv2) { .x = WIN_WIDTH / 2, .y = WIN_HEIGHT / 2 };
 	if (app->cursor_pos.x < (30 * WIN_WIDTH / 64))
 		fake_cur.x = 30 * WIN_WIDTH / 64;
@@ -48,9 +47,10 @@ static void		handle_zoom(int keycode, t_app *app)
 	if (keycode == KEY_ZOOM_OUT && app->ctx.zoom >= 0.0001)
 		app->ctx.zoom /= 1.05f;
 	if (keycode == KEY_ZOOM_IN)
+	{
 		app->ctx.zoom *= 1.05f;
-	if (keycode == KEY_ZOOM_OUT || keycode == KEY_ZOOM_IN)
 		zoom(app);
+	}
 }
 
 static void		handle_movement(int keycode, t_app *app)
@@ -69,12 +69,17 @@ static void		switch_fractol(int keycode, t_app *app)
 {
 	if (keycode == KEY_1)
 	{
-		app->drawing_func = &mendeleiev;
+		app->drawing_func = &mandelbrot;
 		init_drawing_ctx(app);
 	}
 	if (keycode == KEY_2)
 	{
 		app->drawing_func = &julia;
+		init_drawing_ctx(app);
+	}
+	if (keycode == KEY_3)
+	{
+		app->drawing_func = &burning_ship;
 		init_drawing_ctx(app);
 	}
 	if (keycode == KEY_Q)

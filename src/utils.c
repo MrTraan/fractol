@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 14:13:11 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/12 16:42:24 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/12 17:17:03 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void		draw_pixel(t_app *app, t_iv2 point, int iter)
 {
 	int		color;
 
-	if (iter == (int)app->ctx.max_iter && app->drawing_func == &mendeleiev)
+	if (iter == (int)app->ctx.max_iter && app->drawing_func == &mandelbrot)
 		color = 0;
 	else if (app->ctx.palette == BLUE)
 		color = 0xFF * pow(((double)iter / app->ctx.max_iter), 0.8);
