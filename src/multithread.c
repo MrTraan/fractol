@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/12 16:14:42 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/12 16:24:47 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/12 16:43:43 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 static void		*first_quarter(void *v_app)
 {
 	t_iv2	iter;
-	t_app * app;
-	
+	t_app	*app;
+
 	app = (t_app *)v_app;
 	iter.y = 0;
 	while (iter.y < WIN_HEIGHT / 2)
@@ -36,8 +36,8 @@ static void		*first_quarter(void *v_app)
 static void		*second_quarter(void *v_app)
 {
 	t_iv2	iter;
-	t_app * app;
-	
+	t_app	*app;
+
 	app = (t_app *)v_app;
 	iter.y = WIN_HEIGHT / 2;
 	while (iter.y < WIN_HEIGHT)
@@ -56,8 +56,8 @@ static void		*second_quarter(void *v_app)
 static void		*third_quarter(void *v_app)
 {
 	t_iv2	iter;
-	t_app * app;
-	
+	t_app	*app;
+
 	app = (t_app *)v_app;
 	iter.y = 0;
 	while (iter.y < WIN_HEIGHT / 2)
@@ -73,11 +73,11 @@ static void		*third_quarter(void *v_app)
 	return (NULL);
 }
 
-static void 	*fourth_quarter(void *v_app)
+static void		*fourth_quarter(void *v_app)
 {
 	t_iv2	iter;
-	t_app * app;
-	
+	t_app	*app;
+
 	app = (t_app *)v_app;
 	iter.y = WIN_HEIGHT / 2;
 	while (iter.y < WIN_HEIGHT)
@@ -92,17 +92,18 @@ static void 	*fourth_quarter(void *v_app)
 	}
 	return (NULL);
 }
-void				mt_draw_fractal(t_app *app)
+
+void			mt_draw_fractal(t_app *app)
 {
 	pthread_t tid1;
 	pthread_t tid2;
 	pthread_t tid3;
 
-    pthread_create(&tid1, NULL, first_quarter, app);
-    pthread_create(&tid2, NULL, second_quarter, app);
-    pthread_create(&tid3, NULL, third_quarter, app);
+	pthread_create(&tid1, NULL, first_quarter, app);
+	pthread_create(&tid2, NULL, second_quarter, app);
+	pthread_create(&tid3, NULL, third_quarter, app);
 	fourth_quarter(app);
-    pthread_join(tid1, NULL);
-    pthread_join(tid2, NULL);
-    pthread_join(tid3, NULL);
+	pthread_join(tid1, NULL);
+	pthread_join(tid2, NULL);
+	pthread_join(tid3, NULL);
 }

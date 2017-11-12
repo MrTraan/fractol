@@ -6,16 +6,41 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 18:22:27 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/12 16:30:21 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/12 16:54:44 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fractol.h>
 
-static void		handle_zoom(int keycode, t_app *app)
+void			zoom(t_app *app)
 {
 	t_iv2	screen_middle;
+	t_iv2	fake_cur;
+	t_dv2	point_under_cursor;
+	t_dv2	point_in_middle;
 
+	app->ctx.zoom *= 1.05f;
+	screen_middle = (t_iv2) { .x = WIN_WIDTH / 2, .y = WIN_HEIGHT / 2 };
+	if (app->cursor_pos.x < (30 * WIN_WIDTH / 64))
+		fake_cur.x = 30 * WIN_WIDTH / 64;
+	else if (app->cursor_pos.x > (34 * WIN_WIDTH / 64))
+		fake_cur.x = 34 * WIN_WIDTH / 64;
+	else
+		fake_cur.x = app->cursor_pos.x;
+	if (app->cursor_pos.y < (30 * WIN_HEIGHT / 64))
+		fake_cur.y = 30 * WIN_HEIGHT / 64;
+	else if (app->cursor_pos.y > (34 * WIN_HEIGHT / 64))
+		fake_cur.y = 34 * WIN_HEIGHT / 64;
+	else
+		fake_cur.y = app->cursor_pos.y;
+	point_under_cursor = map_point_in_plan(app, fake_cur);
+	point_in_middle = map_point_in_plan(app, screen_middle);
+	app->ctx.offset.x -= (point_in_middle.x - point_under_cursor.x);
+	app->ctx.offset.y -= (point_in_middle.y - point_under_cursor.y);
+}
+
+static void		handle_zoom(int keycode, t_app *app)
+{
 	if (keycode == KEY_MINUS && app->ctx.max_iter > 5)
 		app->ctx.max_iter -= 5;
 	if (keycode == KEY_PLUS)
@@ -25,16 +50,8 @@ static void		handle_zoom(int keycode, t_app *app)
 	if (keycode == KEY_ZOOM_IN)
 		app->ctx.zoom *= 1.05f;
 	if (keycode == KEY_ZOOM_OUT || keycode == KEY_ZOOM_IN)
-	{
-		screen_middle = (t_iv2) { .x = WIN_WIDTH / 2, .y = WIN_HEIGHT / 2 };
-		t_dv2 point_under_cursor = map_point_in_plan(app, app->cursor_pos);
-		t_dv2 point_in_middle = map_point_in_plan(app, screen_middle);
-
-		app->ctx.offset.x -= point_in_middle.x - point_under_cursor.x;
-		app->ctx.offset.y -= point_in_middle.y - point_under_cursor.y;
-	}
+		zoom(app);
 }
-
 
 static void		handle_movement(int keycode, t_app *app)
 {

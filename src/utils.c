@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 14:13:11 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/12 16:10:34 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/12 16:42:24 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void		draw_pixel(t_app *app, t_iv2 point, int iter)
 		color = iter * 0xFFFFFF / app->ctx.max_iter;
 	else
 		color = 0;
-	*(app->image.data + (point.x + (WIN_WIDTH * point.y))) = 
+	*(app->image.data + (point.x + (WIN_WIDTH * point.y))) =
 		(int)mlx_get_color_value(app->mlx, color);
 }
-

@@ -108,6 +108,7 @@ void				julia(t_app *app, t_iv2 coord);
 int					keyhook(int keycode, t_app *app);
 int					mouse_hook(int button, int x, int y, t_app *app);
 int                 motion_notify(int x, int y, t_app *app);
+void				zoom(t_app *app);
 int					mouse_down(int button, int x, int y, t_app *app);
 int					mouse_up(int button, int x, int y, t_app *app);
 
