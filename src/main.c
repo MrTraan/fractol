@@ -6,7 +6,7 @@
 /*   By: ngrasset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/29 14:05:43 by ngrasset          #+#    #+#             */
-/*   Updated: 2017/11/11 16:58:23 by ngrasset         ###   ########.fr       */
+/*   Updated: 2017/11/12 16:28:04 by ngrasset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_ctx		g_default_ctx[2] = {
 		{0, 0},
 		1,
 		40,
-		BLUE
+		RED
 	}
 };
 #include<stdio.h>
@@ -73,7 +73,7 @@ void	put_settings(t_app *app)
 
 int		main_draw_loop(t_app *app)
 {
-	app->drawing_func(app);
+	mt_draw_fractal(app);
 	mlx_put_image_to_window(app->mlx, app->win, app->image.ptr, 0, 0);
 	put_settings(app);
 	return (0);
@@ -89,22 +89,6 @@ void	init_drawing_ctx(t_app *app)
 		ft_memset(&(app->ctx), 0, sizeof(t_ctx));
 }
 
-int test(int a, int b, int c, t_app *app) {
-	(void)a;
-	(void)b;
-	(void)c;
-	app->mouse_down = 1;
-	return (0);
-}
-
-int test2(int a, int b, int c, t_app *app) {
-	(void)a;
-	(void)b;
-	(void)c;
-	app->mouse_down = 0;
-	return (0);
-}
-
 int		loop_hook(t_app *app)
 {
 	t_iv2	screen_middle;
@@ -114,16 +98,16 @@ int		loop_hook(t_app *app)
 		app->ctx.zoom *= 1.05f;
 		screen_middle = (t_iv2) { .x = WIN_WIDTH / 2, .y = WIN_HEIGHT / 2 };
 		
-		fake_cur.x = app->cursor_pos.x < (14 * WIN_WIDTH / 32) ?
-			(14 * WIN_WIDTH / 32) :
-			(app->cursor_pos.x > (18 * WIN_WIDTH / 32) ?
-				(18 * WIN_WIDTH / 32) :
+		fake_cur.x = app->cursor_pos.x < (30 * WIN_WIDTH / 64) ?
+			(30 * WIN_WIDTH / 64) :
+			(app->cursor_pos.x > (34 * WIN_WIDTH / 64) ?
+				(34 * WIN_WIDTH / 64) :
 				app->cursor_pos.x);
 
-		fake_cur.y = app->cursor_pos.y < (14 * WIN_HEIGHT / 32) ?
-			(14 * WIN_HEIGHT / 32) :
-			(app->cursor_pos.y > (18 * WIN_HEIGHT / 32) ?
-				(18 * WIN_HEIGHT / 32) :
+		fake_cur.y = app->cursor_pos.y < (30 * WIN_HEIGHT / 64) ?
+			(30 * WIN_HEIGHT / 64) :
+			(app->cursor_pos.y > (34 * WIN_HEIGHT / 64) ?
+				(34 * WIN_HEIGHT / 64) :
 				app->cursor_pos.y);
 
 		t_dv2 point_under_cursor = map_point_in_plan(app, fake_cur);
@@ -152,10 +136,9 @@ int		main(void)
 			app.image.infos + 1, app.image.infos + 2);
 	init_drawing_ctx(&app);
 	mlx_key_hook(app.win, keyhook, &app);
-	mlx_mouse_hook(app.win, mouse_hook, &app);
 	mlx_hook(app.win, MOTION_NOTIFY, PTR_MOTION_MASK, motion_notify, &app);
-	mlx_hook(app.win, BUTTON_PRESS, BUTTON1_MOTION_MASK, test, &app);
-	mlx_hook(app.win, BUTTON_RELEASE, BUTTON1_MOTION_MASK, test2, &app);
+	mlx_hook(app.win, BUTTON_PRESS, BUTTON1_MOTION_MASK, mouse_down, &app);
+	mlx_hook(app.win, BUTTON_RELEASE, BUTTON1_MOTION_MASK, mouse_up, &app);
 	mlx_loop_hook(app.mlx, loop_hook, &app);
 	main_draw_loop(&app);
 	mlx_loop(app.mlx);

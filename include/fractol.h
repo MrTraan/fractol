@@ -26,7 +26,7 @@
 # define KEY_LEFT 123 
 # define KEY_MINUS 27
 # define KEY_PLUS 24
-# define KEY_RESET 15
+# define KEY_RESET 51
 # define KEY_1 18
 # define KEY_2 19
 # define KEY_ZOOM_OUT 33
@@ -48,6 +48,8 @@
 typedef enum		e_palette
 {
 	BLUE,
+	GREEN,
+	RED,
 	PSYCHO
 }					t_palette;
 
@@ -88,24 +90,28 @@ typedef struct		s_app
 	void			*win;
 	t_image			image;
 	t_ctx			ctx;
-	void			(*drawing_func)(struct s_app *);
+	void			(*drawing_func)(struct s_app *, t_iv2 coord);
 	t_iv2			cursor_pos;
 	char			lock_julia;
 	char			mouse_down;
 }					t_app;
 
-typedef void		(*t_drawing_func)(t_app *);
+typedef void		(*t_drawing_func)(t_app *, t_iv2 coord);
 
 int					main_draw_loop(t_app *app);
 void				init_drawing_ctx(t_app *app);
 
-void				mendeleiev(t_app *app);
-void				julia(t_app *app);
+void				mt_draw_fractal(t_app *app);
+void				mendeleiev(t_app *app, t_iv2 coord);
+void				julia(t_app *app, t_iv2 coord);
 
 int					keyhook(int keycode, t_app *app);
 int					mouse_hook(int button, int x, int y, t_app *app);
 int                 motion_notify(int x, int y, t_app *app);
+int					mouse_down(int button, int x, int y, t_app *app);
+int					mouse_up(int button, int x, int y, t_app *app);
 
 t_dv2				map_point_in_plan(t_app *app, t_iv2 point);
+void				draw_pixel(t_app *app, t_iv2 point, int iter);
 
 #endif
